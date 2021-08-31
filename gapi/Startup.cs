@@ -75,14 +75,16 @@ namespace gapi
             IQueryRequestBuilder requestBuilder,
             CancellationToken cancellationToken)
         {
-            //never allow introspection
-            if (false)
+            var ALLOWINTROSPECTION = false;
+
+            if (ALLOWINTROSPECTION)
             {
                 requestBuilder.AllowIntrospection();
             }
             else
             {
-                requestBuilder.SetIntrospectionNotAllowedMessage("Introspection is disabled");
+                requestBuilder.SetIntrospectionNotAllowedMessage
+                    ("Introspection is disabled");
             }
             return base.OnCreateAsync(context, requestExecutor, requestBuilder, cancellationToken);
         }
