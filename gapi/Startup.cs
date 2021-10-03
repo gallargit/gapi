@@ -5,13 +5,10 @@ using HotChocolate.Execution;
 using HotChocolate.Execution.Options;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace gapi
 {
@@ -61,32 +58,8 @@ namespace gapi
                 .AddQueryType<Query>()
                 .SetRequestOptions(_ => new RequestExecutorOptions { ExecutionTimeout = TimeSpan.FromSeconds(GraphQLSecondsTimeout) })
                 //disable introspection queries
-                .AddHttpRequestInterceptor<CustomHttpRequestInterceptor>()
-                .AddIntrospectionAllowedRule() //as seen at https://github.com/ChilliCream/hotchocolate/issues/3417
+                .AllowIntrospection(false)
                 ;
-        }
-    }
-
-    public class CustomHttpRequestInterceptor : DefaultHttpRequestInterceptor
-    {
-        public override ValueTask OnCreateAsync(
-            HttpContext context,
-            IRequestExecutor requestExecutor,
-            IQueryRequestBuilder requestBuilder,
-            CancellationToken cancellationToken)
-        {
-            var ALLOWINTROSPECTION = false;
-
-            if (ALLOWINTROSPECTION)
-            {
-                requestBuilder.AllowIntrospection();
-            }
-            else
-            {
-                requestBuilder.SetIntrospectionNotAllowedMessage
-                    ("Introspection is disabled");
-            }
-            return base.OnCreateAsync(context, requestExecutor, requestBuilder, cancellationToken);
         }
     }
 }

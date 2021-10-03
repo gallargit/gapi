@@ -8,6 +8,12 @@ namespace gapi.Queries
     /// </summary>
     public class Query
     {
+        //sample query
+        /*
+            {
+                demodata
+            }
+        */
         public Query()
         {
         }
